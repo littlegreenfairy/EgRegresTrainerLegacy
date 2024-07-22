@@ -123,7 +123,7 @@
       bool operator() (const HybridGBREvent *ev1, const HybridGBREvent *ev2) const { return fabs(ev1->Target())<fabs(ev2->Target()) ? true : false; }
   }; */ 
   
-  class GBRVarCMP : public std::binary_function<HybridGBREvent*, HybridGBREvent*, bool> {
+class GBRVarCMP : public std::function<bool(HybridGBREvent*, HybridGBREvent*)> {
     public:
       GBRVarCMP() {}
       GBRVarCMP(int idx) : fVarIdx(idx) {}      

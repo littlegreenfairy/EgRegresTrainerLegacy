@@ -79,7 +79,7 @@ EvtIndexLUT::EvtData& EvtIndexLUT::EvtData::operator+=(EvtIndexLUT::EvtData& rhs
 void EvtIndexLUT::sort()
 {
   std::sort(data_.begin(),data_.end());
-  std::for_each(data_.begin(),data_.end(),std::mem_fun_ref(&RunData::sort));
+  std::for_each(data_.begin(),data_.end(),std::mem_fn(&RunData::sort));
   //std::sort(filenames_.begin(),filenames_.end());
   isSorted_=true;
   lastRunW_=0;

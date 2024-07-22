@@ -9,6 +9,7 @@
 #include <string>
 #include <algorithm>
 #include <numeric>
+#include <functional>
 
 class EvtIndexLUT {
 public:
@@ -89,7 +90,7 @@ public:
       
     const EvtData& operator[](size_t index)const;
     
-    void sort(){std::sort(data_.begin(),data_.end());std::for_each(data_.begin(),data_.end(),std::mem_fun_ref(&LumiData::sort));}
+    void sort(){std::sort(data_.begin(),data_.end());std::for_each(data_.begin(),data_.end(),std::mem_fn(&LumiData::sort));}
     const LumiData* getLumi(int lumiSec)const{return TempFuncs::findSingleSorted<std::vector<LumiData>,LumiData,int>(data_,lumiSec);}
   };
 private:

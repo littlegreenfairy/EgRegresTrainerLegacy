@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <algorithm>
 #include <cmath>
-  
+#include <functional>  
   class GBREvent {
 
     public:
@@ -56,19 +56,19 @@
   };
   
   
-  class GBRTargetCMP : public std::binary_function<GBREvent*, GBREvent*, bool> {
+class GBRTargetCMP : public std::function<bool(GBREvent*, GBREvent*)> {
     public:
       GBRTargetCMP() {}
       bool operator() (const GBREvent *ev1, const GBREvent *ev2) const { return ev1->Target()<ev2->Target() ? true : false; }
   };
   
-  class GBRAbsTargetCMP : public std::binary_function<GBREvent*, GBREvent*, bool> {
+class GBRAbsTargetCMP : public std::function<bool(GBREvent*, GBREvent*)> {
     public:
       GBRAbsTargetCMP() {}
       bool operator() (const GBREvent *ev1, const GBREvent *ev2) const { return std::abs(ev1->Target())<std::abs(ev2->Target()) ? true : false; }
   };  
   
-  class GBRVarCMP : public std::binary_function<GBREvent*, GBREvent*, bool> {
+class GBRVarCMP : public std::function<bool(GBREvent*, GBREvent*)> {
     public:
       GBRVarCMP() {}
       GBRVarCMP(int idx) : fVarIdx(idx) {}      

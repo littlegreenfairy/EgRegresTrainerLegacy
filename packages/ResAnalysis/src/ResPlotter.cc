@@ -13,7 +13,7 @@
 #include "RooPlot.h"
 #include "RooHist.h"
 #include "TROOT.h"
-
+#include "RooCurve.h"
 
 void ResPlotter::Config::setDefaults()
 {

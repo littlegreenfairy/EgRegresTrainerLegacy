@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <sstream>
-
+#include <functional>
 template <typename TCont,typename TVal> const size_t findSingleSortedIndex(const TCont& container,const TVal& val)
 {
   // typename TCont::const_iterator;
@@ -82,14 +82,14 @@ void EvtList::sort()
   lastRunIndex_=std::numeric_limits<size_t>::max();
   lastLumiIndex_=std::numeric_limits<size_t>::max();
   std::sort(runs_.begin(),runs_.end());
-  std::for_each(runs_.begin(),runs_.end(),std::mem_fun_ref(&EvtList::RunData::sort));
+  std::for_each(runs_.begin(),runs_.end(),std::mem_fn(&EvtList::RunData::sort));
   
 }
 
 void EvtList::RunData::sort()
 {
   std::sort(lumis.begin(),lumis.end());
-  std::for_each(lumis.begin(),lumis.end(),std::mem_fun_ref(&EvtList::LumiData::sort));
+  std::for_each(lumis.begin(),lumis.end(),std::mem_fn(&EvtList::LumiData::sort));
 }
 void EvtList::read(std::istream& stream)
 { 

@@ -676,6 +676,7 @@ void AnaFuncs::setBranchAddress(TTree *tree,const char* branchName,void *address
 
 void AnaFuncs::readFilelistFromPattern(const std::string& filelistPattern,std::vector<std::string> &filenames)
 {
+  /*
   char filename[512];
   auto file = popen(("ls "+filelistPattern).c_str(),"r");
   while(file && !std::feof(file)){
@@ -685,6 +686,9 @@ void AnaFuncs::readFilelistFromPattern(const std::string& filelistPattern,std::v
     filenames.push_back(filenameStr);
   }
   std::fclose(file);
+  */
+  assert("AnaFuncs::readFilelistFromPattern has been removed for now" && false);
+  
 }
 
 void AnaFuncs::readFilelistFromFile(const std::string& fileListName,std::vector<std::string> &filenames)
