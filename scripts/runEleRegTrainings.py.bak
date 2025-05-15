@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import subprocess
 import os
@@ -54,7 +54,7 @@ def main():
     
     
     #step1 train the calo only regression using IDEAL intercalibration constants
-    print("starting step1")
+    print "starting step1"
     regArgs = RegArgs()
     regArgs.input_training = str(input_ideal_ic)
     regArgs.input_testing = str(input_ideal_ic)  
@@ -68,7 +68,7 @@ def main():
     if run_step1: regArgs.run_eb_and_ee()
     
     #step2 now we run over the REAL intercalibration constant data and make a rew tree with this regression included
-    print("starting step2")
+    print "starting step2"
     regArgs.do_eb = True
     forest_eb_file = regArgs.output_name()
     regArgs.do_eb = False
@@ -79,7 +79,7 @@ def main():
     if run_step2: subprocess.Popen(["bin/el9_amd64_gcc12/RegressionApplierExe",input_real_ic,input_for_res_training,"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",regArgs.tree_name,"--writeFullTree","1","--regOutTag","Ideal"]).communicate()
     
     #step3 we now run over re-train with the REAL sample for the sigma, changing the target to have the correction applied 
-    print("starting step3")
+    print "starting step3"
     regArgs.base_name = "regEleEcal{era_name}_RealIC_RealTraining".format(era_name=era_name)
     regArgs.input_training = input_for_res_training
     regArgs.input_testing = input_for_res_training
@@ -93,7 +93,7 @@ def main():
     
     #step4 do the E/p low combination
     #remember we use the Ideal Mean but Real Sigma (real mean is 1 by construction)
-    print("starting step4")
+    print "starting step4"
     input_for_comb = str(regArgs.applied_name())
 
     regArgs.base_name = "regEleEcalTrk{era_name}_RealIC".format(era_name=era_name)
