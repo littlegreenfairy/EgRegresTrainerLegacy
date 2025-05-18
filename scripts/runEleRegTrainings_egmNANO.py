@@ -34,14 +34,14 @@ def main():
         raise ValueError("era 2016 is not yet implimented".format(era))
     elif args.era=='2017':
         era_name = "2017UL"
-        input_ideal_ic  = "{}/DoubleElectron_FlatPt-1To300_2018ConditionsFlatPU0to70ECALGT_105X_upgrade2018_realistic_IdealEcalIC_v4-v1_AODSIM_EgRegTreeV5Refined.root".format(args.input_dir)
+        input_ideal_ic  = "{}/DoubleElectron_FlatPt-1To300_2017ConditionsFlatPU0to70ECALGT_105X_mc2017_realistic_IdealEcalIC_v5-v2_AODSIM_EgRegTreeV5Refined.root".format(args.input_dir)
         input_real_ic = "{}/DoubleElectron_FlatPt-1To300_2017ConditionsFlatPU0to70_105X_mc2017_realistic_v5-v2_AODSIM_EgRegTreeV5Refined.root".format(args.input_dir)
         ideal_eventnr_cut = "evt.eventnr%10==0"  #2million electrons
         real_eventnr_cut = "evt.eventnr%10==1" #2million electron
         ep_eventnr_cut = "evt.eventnr%10==2" #2million electrons
     elif args.era=='2018':
         era_name = "2018UL"
-        input_ideal_ic  = "{}/DoubleElectron_FlatPt-1To300_2018ConditionsFlatPU0to70ECALGT_105X_upgrade2018_realistic_IdealEcalIC_v4-v1_AODSIM_EgRegTreeV5Refined.root".format(args.input_dir)
+        input_ideal_ic  = "{}/retraining_regression/MC/CCToEEPrompt_mc_2025Apr25_postEE.root".format(args.input_dir)
         input_real_ic = "{}/retraining_regression/MC/CCToEEPrompt_mc_2025Apr25_postEE.root".format(args.input_dir)    
         ideal_eventnr_cut = "evt.eventnr%5==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         real_eventnr_cut = "evt.eventnr%5==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
