@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+import argparse
+import subprocess
+    
+if __name__ =='__main__':
+    
+    parser = argparse.ArgumentParser(description='makes a list of files to run over')
+    parser.add_argument('input_file',help='input filename')
+    parser.add_argument('output_file',help='output filename')
+    parser.add_argument('--ideal',help='ideal training files with {region} instead of EB,EE')
+    parser.add_argument('--real',help='real training files with {region} instead of EB,EE')
+    parser.add_argument('--ecaltrk',help='ecaltrk training files with {region} instead of EB,EE')
+    args = parser.parse_args()
+
+    
+    base_cmd = "./bin/el9_amd64_gcc12/RegressionApplierExe {input_file} {output_file} --gbrForestFileEB {gbrEB} --nrThreads 4 --writeFullTree 1 --regOutTag {reg_out_tag}"
+        
+    ecal_ideal_file = "ecalIdealTmp.root"
+    #ecal_real_file = "ecalRealTmp.root"
+
+    #apply the ideal training
+    
+    ideal_args = {}
+    ideal_args['input_file'] = args.input_file
+    ideal_args['output_file'] = ecal_ideal_file
+    ideal_args['gbrEB'] = args.ideal.format(region="EB")
+   # ideal_args['gbrEE'] = args.ideal.format(region="EE")
+    ideal_args['reg_out_tag'] = "Ideal"
+    cmd = base_cmd.format(**ideal_args)
+    print(cmd)
+    subprocess.Popen(cmd.split()).communicate()
+    
+    
+    

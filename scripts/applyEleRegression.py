@@ -23,7 +23,7 @@ if __name__ =='__main__':
     
     ideal_args = {}
     ideal_args['input_file'] = args.input_file
-    ideal_args['output_file'] = ecal_ideal_file
+    ideal_args['output_file'] = args.output_file
     ideal_args['gbrEB'] = args.ideal.format(region="EB")
     ideal_args['gbrEE'] = args.ideal.format(region="EE")
     ideal_args['reg_out_tag'] = "Ideal"
@@ -31,23 +31,23 @@ if __name__ =='__main__':
     print(cmd)
     subprocess.Popen(cmd.split()).communicate()
     
-    real_args = {}
-    real_args['input_file'] = ecal_ideal_file
-    real_args['output_file'] = ecal_real_file
-    real_args['gbrEB'] = args.real.format(region="EB")
-    real_args['gbrEE'] = args.real.format(region="EE")
-    real_args['reg_out_tag'] = "Real"    
-    cmd = base_cmd.format(**real_args)
-    subprocess.Popen(cmd.split()).communicate()
+   # real_args = {}
+   # real_args['input_file'] = ecal_ideal_file
+   # real_args['output_file'] = ecal_real_file
+   # real_args['gbrEB'] = args.real.format(region="EB")
+   # real_args['gbrEE'] = args.real.format(region="EE")
+   # real_args['reg_out_tag'] = "Real"    
+   # cmd = base_cmd.format(**real_args)
+   # subprocess.Popen(cmd.split()).communicate()
     
 
-    ecaltrk_args = {}
-    ecaltrk_args['input_file'] = ecal_real_file
-    ecaltrk_args['output_file'] = args.output_file
-    ecaltrk_args['gbrEB'] = args.ecaltrk.format(region="EB")
-    ecaltrk_args['gbrEE'] = args.ecaltrk.format(region="EE")
-    ecaltrk_args['reg_out_tag'] = "EcalTrk"
-    cmd = base_cmd.format(**ecaltrk_args)
-    subprocess.Popen(cmd.split()).communicate()
+   # ecaltrk_args = {}
+   # ecaltrk_args['input_file'] = ecal_real_file
+   # ecaltrk_args['output_file'] = args.output_file
+   # ecaltrk_args['gbrEB'] = args.ecaltrk.format(region="EB")
+   # ecaltrk_args['gbrEE'] = args.ecaltrk.format(region="EE")
+   # ecaltrk_args['reg_out_tag'] = "EcalTrk"
+   # cmd = base_cmd.format(**ecaltrk_args)
+   # subprocess.Popen(cmd.split()).communicate()
     
     
