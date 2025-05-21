@@ -23,8 +23,8 @@ def main():
     #             ECAL ECAL-Trk IC train = eventnr%10=2
     run_step1 = True
     run_step2 = True
-    run_step3 = True
-    run_step4 = True
+    run_step3 = False
+    run_step4 = False
     run_step4_extra = False
     
     base_ele_cuts = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && ele.et>0 && {extra_cuts})"
@@ -43,9 +43,9 @@ def main():
         era_name = "2018UL"
         input_ideal_ic  = "{}/DoubleElectron_FlatPt-1To300_2018ConditionsFlatPU0to70ECALGT_105X_upgrade2018_realistic_IdealEcalIC_v4-v1_AODSIM_EgRegTreeV5Refined.root".format(args.input_dir)
         input_real_ic = "{}/DoubleElectron_FlatPt-1To300_2018ConditionsFlatPU0to70RAW_105X_upgrade2018_realistic_v4-v1_AODSIM_EgRegTreeV5Refined.root".format(args.input_dir)    
-        ideal_eventnr_cut = "evt.eventnr%5==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
-        real_eventnr_cut = "evt.eventnr%5==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
-        ep_eventnr_cut = "evt.eventnr%5==2" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
+        ideal_eventnr_cut = "evt.eventnr%500==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
+        real_eventnr_cut = "evt.eventnr%500==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
+        ep_eventnr_cut = "evt.eventnr%500==2" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
     else:
         raise ValueError("era {} is invalid, options are 2016/2017/2018".format(era))
 
@@ -74,6 +74,7 @@ def main():
     regArgs.do_eb = False
     forest_ee_file = regArgs.output_name()
 
+    #print("Applying to:", input_for_res_training)
     regArgs.base_name = "regEleEcal{era_name}_RealIC_IdealTraining".format(era_name=era_name)
     input_for_res_training = str(regArgs.applied_name()) #save the output name before we change it
     if run_step2: subprocess.Popen(["bin/el9_amd64_gcc12/RegressionApplierExe",input_real_ic,input_for_res_training,"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",regArgs.tree_name,"--writeFullTree","1","--regOutTag","Ideal"]).communicate()
@@ -82,6 +83,7 @@ def main():
     print("starting step3")
     regArgs.base_name = "regEleEcal{era_name}_RealIC_RealTraining".format(era_name=era_name)
     regArgs.input_training = input_for_res_training
+    print("Applying to:", input_for_res_training)
     regArgs.input_testing = input_for_res_training
     regArgs.target = "mc.energy/((sc.rawEnergy+sc.rawESEnergy)*regIdealMean)"
     regArgs.fix_mean = True

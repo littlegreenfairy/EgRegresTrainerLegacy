@@ -206,8 +206,26 @@ int main(int argc, char** argv)
   const auto regDataEBAll = HistFuncs::readTree(inTree,varsEB+":"+*targetEB,"");
   const auto regDataEEAll = HistFuncs::readTree(inTree,varsEE+":"+*targetEE,"");
  // const auto evtData = HistFuncs::readTree(inTree,"runnr:eventnr:lumiSec:ele.isEB:"+std::string(etBinVar),"");
-  const auto evtData = HistFuncs::readTree(inTree,"runnr:eventnr:lumiSec:sc.isEB:"+std::string(etBinVar),"");
-  fillTree(regDataEBAll,regDataEEAll,evtData,gbrForests,outTreeData,outTree,nrThreads);
+  const auto evtDataAll   = HistFuncs::readTree(inTree, "runnr:eventnr:lumiSec:sc.isEB:" + std::string(etBinVar), "");
+ // const auto evtData = HistFuncs::readTree(inTree,"runnr:eventnr:lumiSec:sc.isEB:"+std::string(etBinVar),"");
+  
+  // Build filtered vectors with only every 10th entry
+  std::vector<std::vector<float>> regDataEB, regDataEE, evtData;
+  const size_t N = evtDataAll.size();
+  regDataEB.reserve((N + 9) / 10);
+  regDataEE.reserve((N + 9) / 10);
+  evtData  .reserve((N + 9) / 10);
+
+  for (size_t i = 0; i < N; ++i) {
+    if (i % 10 != 0) continue;   // keep only indices 0,10,20,...
+    regDataEB.push_back( regDataEBAll[i] );
+    regDataEE.push_back( regDataEEAll[i] );
+    evtData  .push_back( evtDataAll[i] );
+  }
+
+  fillTree(regDataEB, regDataEE, evtData, gbrForests, outTreeData, outTree, nrThreads);
+  
+  //fillTree(regDataEBAll,regDataEEAll,evtData,gbrForests,outTreeData,outTree,nrThreads);
 
 
   outFile->Write();
@@ -230,7 +248,8 @@ int main(int argc, char** argv)
       fullMeanBranch->Fill();
       fullSigmaBranch->Fill();
       fullInvTarBranch->Fill();
-    }
+ 
+      }
     outTree->Write(0,TObject::kOverwrite);
     outFile->Write();
   }
@@ -296,6 +315,7 @@ void fillTree(const std::vector<std::vector<float> >& regDataEB,
       outTreeData.mean = regResult.first;
       outTreeData.sigma = regResult.second;
       outTreeData.invTar = evtDataEntry[3] ? 1./regDataEB[entryNr].back() : 1./regDataEE[entryNr].back();
+      //outTree->Fill();
       outTree->Fill();	
       threadEntryNrs[threadNr]+=nrThreads;
       if(initThread(threadNr)) newNrActiveThreads = threadNr+1;
