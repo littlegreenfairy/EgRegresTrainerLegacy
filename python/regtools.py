@@ -23,7 +23,7 @@ class RegArgs:
         self.fix_mean = False
         self.input_testing = "test.root"
         self.input_training = "train.root"
-        self.target = "mc.energy/(sc.rawEnergy)"
+        self.target = "mc.energy/(sc.rawEnergy + sc.rawESEnergy)"
         self.var_eb = "nrVert:sc.rawEnergy:sc.etaWidth:sc.phiWidth:ssFrac.e3x3/sc.rawEnergy:sc.seedClusEnergy/sc.rawEnergy:ssFrac.eMax/sc.rawEnergy:ssFrac.e2nd/sc.rawEnergy:ssFrac.eLeftRightDiffSumRatio:ssFrac.eTopBottomDiffSumRatio:ssFrac.sigmaIEtaIEta:ssFrac.sigmaIEtaIPhi:ssFrac.sigmaIPhiIPhi:sc.numberOfSubClusters:sc.clusterMaxDR:sc.clusterMaxDRDPhi:sc.clusterMaxDRDEta:sc.clusterMaxDRRawEnergy/sc.rawEnergy:clus1.clusterRawEnergy/sc.rawEnergy:clus2.clusterRawEnergy/sc.rawEnergy:clus3.clusterRawEnergy/sc.rawEnergy:clus1.clusterDPhiToSeed:clus2.clusterDPhiToSeed:clus3.clusterDPhiToSeed:clus1.clusterDEtaToSeed:clus2.clusterDEtaToSeed:clus3.clusterDEtaToSeed:sc.iEtaOrX:sc.iPhiOrY"  
         self.var_ee = "nrVert:sc.rawEnergy:sc.etaWidth:sc.phiWidth:ssFrac.e3x3/sc.rawEnergy:sc.seedClusEnergy/sc.rawEnergy:ssFrac.eMax/sc.rawEnergy:ssFrac.e2nd/sc.rawEnergy:ssFrac.eLeftRightDiffSumRatio:ssFrac.eTopBottomDiffSumRatio:ssFrac.sigmaIEtaIEta:ssFrac.sigmaIEtaIPhi:ssFrac.sigmaIPhiIPhi:sc.numberOfSubClusters:sc.clusterMaxDR:sc.clusterMaxDRDPhi:sc.clusterMaxDRDEta:sc.clusterMaxDRRawEnergy/sc.rawEnergy:clus1.clusterRawEnergy/sc.rawEnergy:clus2.clusterRawEnergy/sc.rawEnergy:clus3.clusterRawEnergy/sc.rawEnergy:clus1.clusterDPhiToSeed:clus2.clusterDPhiToSeed:clus3.clusterDPhiToSeed:clus1.clusterDEtaToSeed:clus2.clusterDEtaToSeed:clus3.clusterDEtaToSeed:sc.iEtaOrX:sc.iPhiOrY:sc.seedEta"
         self.cuts_base = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && evt.eventnr%2==0)"
@@ -125,18 +125,18 @@ Regression.1.FixMean: {args.fix_mean}
         self.do_eb = True
         self.make_cfg()
         print("starting: {}".format(self.name()))
-        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
+        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
         forest_eb_file = self.output_name()
         print("Expected EB output:", forest_eb_file)
     
         self.do_eb = False
         self.make_cfg()
         print("starting: {}".format(self.name()))
-        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
+        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
         forest_ee_file = self.output_name()
         print("Expected EE output:", forest_ee_file)
         
-        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionApplierExe",self.input_testing,self.applied_name(),"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",self.tree_name,"--writeFullTree",self.write_full_tree,"--regOutTag",self.reg_out_tag]).communicate()
+        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionApplierExe",self.input_testing,self.applied_name(),"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",self.tree_name,"--writeFullTree",self.write_full_tree,"--regOutTag",self.reg_out_tag]).communicate()
 
         print("made ",self.applied_name())
 

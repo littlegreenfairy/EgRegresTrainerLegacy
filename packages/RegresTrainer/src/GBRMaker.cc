@@ -27,6 +27,7 @@
 #include "RegresTrainer/ErrorCorrection.h"
 #include "RegresTrainer/TrackMomentumCorrection.h"
 
+#include <sys/stat.h>
 #include <TFile.h>
 #include <TChain.h>
 #include <TCut.h>
@@ -180,11 +181,27 @@ bool GBRMaker::init(const string& name,
     // open output file that will contain the GBRForest
     stringstream outFileName;
     outFileName  <<  outputDirectory  <<  "/"  <<  name  <<  "_results.root";
+    
+    std::string path = outFileName.str();
+    std::cout << "DEBUG: Opening output file at: " << path << std::endl;
+
+    // 2) Check that outputDirectory exists and is a directory
+    struct stat st;
+    if (stat(outputDirectory.c_str(), &st) != 0) {
+    std::cerr << "ERROR: cannot stat directory “" << outputDirectory << "”: " << std::strerror(errno) << std::endl;
+    } else if (!S_ISDIR(st.st_mode)) {
+    std::cerr << "ERROR: path “" << outputDirectory << "” exists but is not a directory\n";
+    }
+    // 3) Check write permission bit on the directory
+    if (access(outputDirectory.c_str(), W_OK) != 0) {
+    std::cerr << "ERROR: no write permission on directory “" << outputDirectory  << "”: " << std::strerror(errno) << std::endl;	}
+
     m_fileOut = TFile::Open(outFileName.str().c_str(), "RECREATE");
     if(!m_fileOut || !m_fileOut->IsOpen())
     {
-        cout << "FATAL: GBRMaker::init(): Cannot open output file " << outFileName.str() << "\n";
-        return false;
+            std::cerr << "FATAL: GBRMaker::init(): Cannot open output file" << path << "�\n";
+            std::cerr << "  errno: " << errno << " (" << std::strerror(errno) << ")\n";
+	    return false;
     }
     m_fileOut->cd();
 

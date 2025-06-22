@@ -9,7 +9,7 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description='runs the SC regression trainings')
     parser.add_argument('--era',required=True,help='year to produce for, 2016, 2017, 2018 are the options')
-    parser.add_argument('--input_dir','-i',default='/eos/cms/store/group/phys_egamma/ec/prrout/EGM_regression_Ntuples_CMSSW_12_4_X_30012023/PostEE_ntuples/1246/EgRegTree/AODSIM/DoubleElectron_FlatPT-1to500_13p6TeV',help='input directory with the ntuples')
+    parser.add_argument('--input_dir','-i',default='/eos/cms/store/group/phys_egamma/ReleaseInputsArchive/2018UL_ElePhoReg/input_trees',help='input directory with the ntuples')
     parser.add_argument('--output_dir','-o',default="results",help='output dir')
     args = parser.parse_args()
 
@@ -21,9 +21,9 @@ def main():
     #event split: ECAL Ideal IC train = eventnr%10=0
     #             ECAL Real IC train = eventnr%10=1
     #             ECAL ECAL-Trk IC train = eventnr%10=2
-    run_step1 = True
-    run_step2 = True
-    run_step3 = True
+    run_step1 = False
+    run_step2 = False
+    run_step3 = False
     run_step4 = True
     run_step4_extra = False
     
@@ -46,15 +46,8 @@ def main():
         ideal_eventnr_cut = "evt.eventnr%5==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         real_eventnr_cut = "evt.eventnr%5==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         ep_eventnr_cut = "evt.eventnr%5==2" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
-    elif args.era=='2022':
-        era_name = "2022"
-        input_ideal_ic  = "{}/DoubleElectron_ECALIdealIC_PostEE_124X_30032023.root".format(args.input_dir)
-        input_real_ic = "{}/DoubleElectron_ECALRealIC_PostEE_124X_02042023.root".format(args.input_dir)    
-        ideal_eventnr_cut = "evt.eventnr%5==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
-        real_eventnr_cut = "evt.eventnr%5==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
-        ep_eventnr_cut = "evt.eventnr%5==2" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
     else:
-        raise ValueError("era {} is invalid, options are 2016/2017/2018/2022".format(era))
+        raise ValueError("era {} is invalid, options are 2016/2017/2018".format(era))
 
 
     
@@ -84,7 +77,7 @@ def main():
     #print("Applying to:", input_for_res_training)
     regArgs.base_name = "regEleEcal{era_name}_RealIC_IdealTraining".format(era_name=era_name)
     input_for_res_training = str(regArgs.applied_name()) #save the output name before we change it
-    if run_step2: subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionApplierExe",input_real_ic,input_for_res_training,"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",regArgs.tree_name,"--writeFullTree","1","--regOutTag","Ideal"]).communicate()
+    if run_step2: subprocess.Popen(["bin/el9_amd64_gcc12/RegressionApplierExe",input_real_ic,input_for_res_training,"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",regArgs.tree_name,"--writeFullTree","1","--regOutTag","Ideal"]).communicate()
     
     #step3 we now run over re-train with the REAL sample for the sigma, changing the target to have the correction applied 
     print("starting step3")
@@ -131,7 +124,7 @@ def main():
         regArgs.run_eb_and_ee()
         
         regArgs.base_name = "regEleEcalTrkLowHighPt{era_name}_RealIC".format(era_name=era_name)
-        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionApplierExe",regArgs.input_testing,regArgs.applied_name(),"--gbrForestFileEB",forest_eb,"--gbrForestFileEE",forest_ee,"--gbrForestFileEBHighEt",forest_eb_highpt,"--gbrForestFileEEHighEt",forest_ee_highpt,"--highEtThres","50.","--nrThreads","4","--treeName",regArgs.tree_name,"--writeFullTree","1"]).communicate()
+        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionApplierExe",regArgs.input_testing,regArgs.applied_name(),"--gbrForestFileEB",forest_eb,"--gbrForestFileEE",forest_ee,"--gbrForestFileEBHighEt",forest_eb_highpt,"--gbrForestFileEEHighEt",forest_ee_highpt,"--highEtThres","50.","--nrThreads","4","--treeName",regArgs.tree_name,"--writeFullTree","1"]).communicate()
     
         
     
