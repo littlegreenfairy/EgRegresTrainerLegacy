@@ -1,0 +1,30 @@
+bin/el9_amd64_gcc12/RegressionTrainerExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionTrainerExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionApplierExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionApplierExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionTrainerExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionTrainerExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionApplierExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionTrainerExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionTrainerExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+bin/el9_amd64_gcc12/RegressionApplierExe: error while loading shared libraries: libCondFormatsEgammaObjects.so: cannot open shared object file: No such file or directory
+starting step1
+starting: regEleEcal2022_IdealIC_IdealTraining_stdVar_stdCuts_EB_ntrees1500
+Expected EB output: /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_IdealIC_IdealTraining_stdVar_stdCuts_EB_ntrees1500_results.root
+starting: regEleEcal2022_IdealIC_IdealTraining_stdVar_stdCuts_EE_ntrees1500
+Expected EE output: /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_IdealIC_IdealTraining_stdVar_stdCuts_EE_ntrees1500_results.root
+made  /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_IdealIC_IdealTraining_stdVar_stdCuts_ntrees1500_applied.root
+starting step2
+starting step3
+Applying to: /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_RealIC_IdealTraining_stdVar_stdCuts_ntrees1500_applied.root
+starting: regEleEcal2022_RealIC_RealTraining_stdVar_stdCuts_EB_ntrees1500
+Expected EB output: /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_RealIC_RealTraining_stdVar_stdCuts_EB_ntrees1500_results.root
+starting: regEleEcal2022_RealIC_RealTraining_stdVar_stdCuts_EE_ntrees1500
+Expected EE output: /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_RealIC_RealTraining_stdVar_stdCuts_EE_ntrees1500_results.root
+made  /eos/user/e/eldesant/results2022_lowpt/regEleEcal2022_RealIC_RealTraining_stdVar_stdCuts_ntrees1500_applied.root
+starting step4
+starting: regEleEcalTrk2022_RealIC_stdVar_stdCuts_EB_ntrees1500
+Expected EB output: /eos/user/e/eldesant/results2022_lowpt/regEleEcalTrk2022_RealIC_stdVar_stdCuts_EB_ntrees1500_results.root
+starting: regEleEcalTrk2022_RealIC_stdVar_stdCuts_EE_ntrees1500
+Expected EE output: /eos/user/e/eldesant/results2022_lowpt/regEleEcalTrk2022_RealIC_stdVar_stdCuts_EE_ntrees1500_results.root
+made  /eos/user/e/eldesant/results2022_lowpt/regEleEcalTrk2022_RealIC_stdVar_stdCuts_ntrees1500_applied.root

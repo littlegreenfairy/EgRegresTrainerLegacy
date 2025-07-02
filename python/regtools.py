@@ -125,18 +125,18 @@ Regression.1.FixMean: {args.fix_mean}
         self.do_eb = True
         self.make_cfg()
         print("starting: {}".format(self.name()))
-        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
+        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
         forest_eb_file = self.output_name()
         print("Expected EB output:", forest_eb_file)
     
         self.do_eb = False
         self.make_cfg()
         print("starting: {}".format(self.name()))
-        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
+        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionTrainerExe",self.cfg_name()]).communicate()
         forest_ee_file = self.output_name()
         print("Expected EE output:", forest_ee_file)
         
-        subprocess.Popen(["bin/slc7_amd64_gcc12/RegressionApplierExe",self.input_testing,self.applied_name(),"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",self.tree_name,"--writeFullTree",self.write_full_tree,"--regOutTag",self.reg_out_tag]).communicate()
+        subprocess.Popen(["bin/el9_amd64_gcc12/RegressionApplierExe",self.input_testing,self.applied_name(),"--gbrForestFileEE",forest_ee_file,"--gbrForestFileEB",forest_eb_file,"--nrThreads","4","--treeName",self.tree_name,"--writeFullTree",self.write_full_tree,"--regOutTag",self.reg_out_tag]).communicate()
 
         print("made ",self.applied_name())
 

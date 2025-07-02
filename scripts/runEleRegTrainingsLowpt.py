@@ -21,13 +21,13 @@ def main():
     #event split: ECAL Ideal IC train = eventnr%10=0
     #             ECAL Real IC train = eventnr%10=1
     #             ECAL ECAL-Trk IC train = eventnr%10=2
-    run_step1 = True
-    run_step2 = True
-    run_step3 = True
+    run_step1 = False
+    run_step2 = False
+    run_step3 = False
     run_step4 = True
     run_step4_extra = False
     
-    base_ele_cuts = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && ele.et>0  && mc.pt<50 && {extra_cuts})"
+    base_ele_cuts = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && ele.et>0  && mc.pt<11 && {extra_cuts})"
 
     if args.era=='2016':
         era_name = "2016UL"
@@ -105,15 +105,15 @@ def main():
     print("starting step4")
     input_for_comb = str(regArgs.applied_name())
 
-    regArgs.base_name = "regEleEcalTrk{era_name}_RealIC".format(era_name=era_name)
+    regArgs.base_name = "regEleEcalLowpt{era_name}_RealIC".format(era_name=era_name)
     regArgs.var_eb =":".join(["(sc.rawEnergy+sc.rawESEnergy)*regIdealMean","regRealSigma/regIdealMean","ele.trkPModeErr/ele.trkPMode","(sc.rawEnergy+sc.rawESEnergy)*regIdealMean/ele.trkPMode","ele.ecalDrivenSeed","ssFull.e3x3/sc.rawEnergy","ele.fbrem","ele.trkEtaMode","ele.trkPhiMode"])
     regArgs.var_ee =":".join(["(sc.rawEnergy+sc.rawESEnergy)*regIdealMean","regRealSigma/regIdealMean","ele.trkPModeErr/ele.trkPMode","(sc.rawEnergy+sc.rawESEnergy)*regIdealMean/ele.trkPMode","ele.ecalDrivenSeed","ssFull.e3x3/sc.rawEnergy","ele.fbrem","ele.trkEtaMode","ele.trkPhiMode"])
-    regArgs.target = "(mc.energy * (ele.trkPModeErr*ele.trkPModeErr + (sc.rawEnergy+sc.rawESEnergy)*(sc.rawEnergy+sc.rawESEnergy)*regRealSigma*regRealSigma) / ( (sc.rawEnergy+sc.rawESEnergy)*regIdealMean*ele.trkPModeErr*ele.trkPModeErr + ele.trkPMode*(sc.rawEnergy+sc.rawESEnergy)*(sc.rawEnergy+sc.rawESEnergy)*regRealSigma*regRealSigma ))"
+    regArgs.target = "mc.energy/((sc.rawEnergy+sc.rawESEnergy)*regIdealMean)"
     regArgs.input_training = input_for_comb
     regArgs.input_testing = input_for_comb
     regArgs.write_full_tree = "1"  
     regArgs.fix_mean = False
-    regArgs.reg_out_tag = "EcalTrk"
+    regArgs.reg_out_tag = "RealLowpt"
     regArgs.cuts_base = base_ele_cuts.format(extra_cuts = ep_eventnr_cut)
     if run_step4: 
         regArgs.run_eb_and_ee()
