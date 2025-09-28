@@ -5,12 +5,11 @@ import os
 import regtools
 from regtools import RegArgs
 import argparse
-import ROOT
 
 def main():
     parser = argparse.ArgumentParser(description='runs the SC regression trainings')
     parser.add_argument('--era',required=True,help='year to produce for, 2016, 2017, 2018 are the options')
-    parser.add_argument('--input_dir','-i',default='/eos/cms/store/group/phys_egamma/ec/prrout/EGM_regression_Ntuples_CMSSW_12_4_X_30012023/PostEE_ntuples/1246/EgRegTree/AODSIM/DoubleElectron_FlatPT-1to500_13p6TeV',help='input directory with the ntuples')
+    parser.add_argument('--input_dir','-i',default='/eos/user/e/eldesant/NtuplesRegression',help='input directory with the ntuples')
     parser.add_argument('--output_dir','-o',default="results",help='output dir')
     args = parser.parse_args()
 
@@ -25,11 +24,10 @@ def main():
     run_step1 = True
     run_step2 = True
     run_step3 = True
-    run_step4 = True    
+    run_step4 = True
     run_step4_extra = False
-
-    #base_ele_cuts = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && mc.pt < 50 && sqrt((mc.eta - ele.eta)*(mc.eta-ele.eta) + TVector2::Phi_mpi_pi(mc.phi - ele.phi)*TVector2::Phi_mpi_pi(mc.phi-ele.phi)) < 0.3&& ele.et>0 && {extra_cuts})"
-    base_ele_cuts = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && mc.pt < 50 && ele.et>0  && {extra_cuts})"
+    
+    base_ele_cuts = "(mc.energy>0 && ssFrac.sigmaIEtaIEta>0 && ssFrac.sigmaIPhiIPhi>0 && mc.pt < 50 && ele.et>0 && {extra_cuts})"
 
     if args.era=='2016':
         era_name = "2016UL"
@@ -48,15 +46,15 @@ def main():
         ideal_eventnr_cut = "evt.eventnr%5==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         real_eventnr_cut = "evt.eventnr%5==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         ep_eventnr_cut = "evt.eventnr%5==2" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
-    elif args.era=='2022':
-        era_name = "2022"
-        input_ideal_ic  = "{}/DoubleElectron_ECALIdealIC_PostEE_124X_30032023.root".format(args.input_dir)
-        input_real_ic = "{}/DoubleElectron_ECALRealIC_PostEE_124X_02042023.root".format(args.input_dir)    
+    elif args.era=='2023':
+        era_name = "2023"
+        input_ideal_ic  = "{}/DoubleElectron_FlatPT-1to500_13p6TeV_130_2023_Real_postBPIX.root".format(args.input_dir)
+        input_real_ic = "{}/DoubleElectron_FlatPT-1to500_13p6TeV_130_2023_Real_postBPIX.root".format(args.input_dir)    
         ideal_eventnr_cut = "evt.eventnr%5==0"  #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         real_eventnr_cut = "evt.eventnr%5==1" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
         ep_eventnr_cut = "evt.eventnr%5==2" #4million electrons (we determined 4 million was optimal but after the 2017 was done)
     else:
-        raise ValueError("era {} is invalid, options are 2016/2017/2018/2022".format(era))
+        raise ValueError("era {} is invalid, options are 2016/2017/2018/2023".format(era))
 
 
     
@@ -110,16 +108,10 @@ def main():
     input_for_comb = str(regArgs.applied_name())
 
     regArgs.base_name = "regEleEcalTrk{era_name}_RealIC".format(era_name=era_name)
-    regArgs.var_eb =":".join(["(sc.rawEnergy+sc.rawESEnergy)*regIdealMean","regRealSigma/regIdealMean","ele.trkPModeErr/ele.trkPMode","(sc.rawEnergy+sc.rawESEnergy)*regIdealMean/ele.trkPMode","ele.ecalDrivenSeed","ssFull.e3x3/sc.rawEnergy","ele.fbrem","ele.trkEtaMode","ele.trkPhiMode"])
-    regArgs.var_ee =":".join(["(sc.rawEnergy+sc.rawESEnergy)*regIdealMean","regRealSigma/regIdealMean","ele.trkPModeErr/ele.trkPMode","(sc.rawEnergy+sc.rawESEnergy)*regIdealMean/ele.trkPMode","ele.ecalDrivenSeed","ssFull.e3x3/sc.rawEnergy","ele.fbrem","ele.trkEtaMode","ele.trkPhiMode"])
-
-    #vecchiotarget
-    #regArgs.target = "(mc.energy * (ele.trkPModeErr*ele.trkPModeErr + (sc.rawEnergy+sc.rawESEnergy)*(sc.rawEnergy+sc.rawESEnergy)*regRealSigma*regRealSigma) / ( (sc.rawEnergy+sc.rawESEnergy)*regIdealMean*ele.trkPModeErr*ele.trkPModeErr + ele.trkPMode*(sc.rawEnergy+sc.rawESEnergy)*(sc.rawEnergy+sc.rawESEnergy)*regRealSigma*regRealSigma ))"
+    regArgs.var_eb =":".join(["(sc.rawEnergy+sc.rawESEnergy)*regIdealMean","regIdealSigma/regIdealMean","ele.trkPModeErr/ele.trkPMode","(sc.rawEnergy+sc.rawESEnergy)*regIdealMean/ele.trkPMode","ele.ecalDrivenSeed","ssFull.e3x3/sc.rawEnergy","ele.fbrem","ele.trkEtaMode","ele.trkPhiMode"])
+    regArgs.var_ee =":".join(["(sc.rawEnergy+sc.rawESEnergy)*regIdealMean","regIdealSigma/regIdealMean","ele.trkPModeErr/ele.trkPMode","(sc.rawEnergy+sc.rawESEnergy)*regIdealMean/ele.trkPMode","ele.ecalDrivenSeed","ssFull.e3x3/sc.rawEnergy","ele.fbrem","ele.trkEtaMode","ele.trkPhiMode"])
     
-    #target con nuovi pesi
     regArgs.target = "(mc.energy * (ele.trkPModeErr*ele.trkPModeErr + (sc.rawEnergy+sc.rawESEnergy)*(sc.rawEnergy+sc.rawESEnergy)*regIdealMean*regIdealMean*regRealSigma*regRealSigma) / ( (sc.rawEnergy+sc.rawESEnergy)*regIdealMean*ele.trkPModeErr*ele.trkPModeErr + ele.trkPMode*(sc.rawEnergy+sc.rawESEnergy)*(sc.rawEnergy+sc.rawESEnergy)*regIdealMean*regIdealMean*regRealSigma*regRealSigma ))"
-    
-
     regArgs.input_training = input_for_comb
     regArgs.input_testing = input_for_comb
     regArgs.write_full_tree = "1"  
